@@ -1,0 +1,237 @@
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Revision Tracker + Quiz</title>
+
+  <style>
+    body {
+      font-family: Arial;
+      text-align: center;
+      margin: 0;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+    }
+
+    h1 {
+      margin-top: 20px;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    .container {
+      background: white;
+      color: black;
+      width: 350px;
+      margin: 20px auto;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0px 10px 25px rgba(0,0,0,0.3);
+      animation: slideUp 0.6s ease;
+    }
+
+    input {
+      padding: 10px;
+      margin: 5px;
+      width: 80%;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      padding: 10px;
+      margin: 5px;
+      border: none;
+      border-radius: 8px;
+      background: #667eea;
+      color: white;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+      background: #5a67d8;
+    }
+
+    .option-btn {
+      display: block;
+      width: 90%;
+      margin: 5px auto;
+      background: #eee;
+      color: black;
+    }
+
+    .option-btn:hover {
+      background: #ddd;
+    }
+
+    .selected {
+      background: #667eea !important;
+      color: white;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      background: #f4f7fb;
+      margin: 10px;
+      padding: 10px;
+      border-radius: 10px;
+      display: flex;
+      justify-content: space-between;
+      animation: fadeIn 0.5s;
+    }
+
+    .delete-btn {
+      background: red;
+      color: white;
+      border: none;
+      padding: 5px;
+      border-radius: 5px;
+    }
+
+    #count {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from {opacity: 0;}
+      to {opacity: 1;}
+    }
+
+    @keyframes slideUp {
+      from {transform: translateY(30px); opacity: 0;}
+      to {transform: translateY(0); opacity: 1;}
+    }
+
+  </style>
+</head>
+
+<body>
+
+<h1>📘 Revision Tracker + Quiz</h1>
+
+<div class="container">
+
+  <input type="text" id="subject" placeholder="Subject"><br>
+  <input type="text" id="topic" placeholder="Topic"><br>
+
+  <button onclick="addTask()">Add</button>
+
+  <ul id="taskList"></ul>
+  <p id="count">Total Tasks: 0</p>
+
+  <h3>Quick Quiz</h3>
+  <p id="question"></p>
+  <div id="options"></div>
+  <button onclick="nextQuestion()">Next</button>
+  <p id="score"></p>
+
+</div>
+
+<script>
+
+let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+displayTasks();
+
+function addTask() {
+  let subject = document.getElementById("subject").value;
+  let topic = document.getElementById("topic").value;
+
+  if (!subject || !topic) return;
+
+  tasks.push(subject + " - " + topic);
+  saveData();
+  displayTasks();
+
+  document.getElementById("subject").value = "";
+  document.getElementById("topic").value = "";
+}
+
+function displayTasks() {
+  let list = document.getElementById("taskList");
+  list.innerHTML = "";
+
+  tasks.forEach((t, i) => {
+    let li = document.createElement("li");
+    li.innerHTML = t + " <button class='delete-btn' onclick='deleteTask(" + i + ")'>X</button>";
+    list.appendChild(li);
+  });
+
+  document.getElementById("count").innerText = "Total Tasks: " + tasks.length;
+}
+
+function deleteTask(i) {
+  tasks.splice(i, 1);
+  saveData();
+  displayTasks();
+}
+
+function saveData() {
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+}
+
+// QUIZ
+let questions = [
+  { q: "What is H2O?", options: ["Oxygen", "Water", "Hydrogen"], answer: "Water" },
+  { q: "Capital of India?", options: ["Delhi", "Mumbai", "Kolkata"], answer: "Delhi" },
+  { q: "2 x 5 = ?", options: ["10", "12", "8"], answer: "10" }
+];
+
+let current = 0;
+let score = 0;
+let selected = null;
+
+function loadQuestion() {
+  let q = questions[current];
+  document.getElementById("question").innerText = q.q;
+
+  let optionsDiv = document.getElementById("options");
+  optionsDiv.innerHTML = "";
+  selected = null;
+
+  q.options.forEach(opt => {
+    let btn = document.createElement("button");
+    btn.innerText = opt;
+    btn.className = "option-btn";
+
+    btn.onclick = function () {
+      selected = opt;
+
+      let all = document.querySelectorAll(".option-btn");
+      all.forEach(b => b.classList.remove("selected"));
+
+      btn.classList.add("selected");
+    };
+
+    optionsDiv.appendChild(btn);
+  });
+}
+
+function nextQuestion() {
+  if (selected === questions[current].answer) score++;
+
+  current++;
+
+  if (current < questions.length) {
+    loadQuestion();
+  } else {
+    document.getElementById("score").innerText =
+      "Score: " + score + "/" + questions.length;
+  }
+}
+
+loadQuestion();
+
+</script>
+
+</body>
+</html>
+
