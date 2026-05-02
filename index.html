@@ -1,10 +1,10 @@
-
-
-
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Revision Tracker + Quiz</title>
+  <title>Aadhya's Revision Tracker</title>
+
+  <!-- Mobile friendly -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
     body {
@@ -20,10 +20,17 @@
       animation: fadeIn 1s ease-in-out;
     }
 
+    .tagline {
+      font-size: 14px;
+      color: #ddd;
+      margin-bottom: 10px;
+    }
+
     .container {
       background: white;
       color: black;
-      width: 350px;
+      width: 90%;
+      max-width: 400px;
       margin: 20px auto;
       padding: 20px;
       border-radius: 15px;
@@ -34,7 +41,7 @@
     input {
       padding: 10px;
       margin: 5px;
-      width: 80%;
+      width: 90%;
       border-radius: 8px;
       border: 1px solid #ccc;
     }
@@ -61,10 +68,6 @@
       margin: 5px auto;
       background: #eee;
       color: black;
-    }
-
-    .option-btn:hover {
-      background: #ddd;
     }
 
     .selected {
@@ -100,7 +103,12 @@
       font-weight: bold;
     }
 
-    /* Animations */
+    .footer {
+      font-size: 12px;
+      margin-top: 10px;
+      color: #aaa;
+    }
+
     @keyframes fadeIn {
       from {opacity: 0;}
       to {opacity: 1;}
@@ -116,7 +124,8 @@
 
 <body>
 
-<h1>📘 Revision Tracker + Quiz</h1>
+<h1>📘 Aadhya's Revision Tracker</h1>
+<p class="tagline">Track. Revise. Improve 🚀</p>
 
 <div class="container">
 
@@ -133,6 +142,8 @@
   <div id="options"></div>
   <button onclick="nextQuestion()">Next</button>
   <p id="score"></p>
+
+  <p class="footer">Built by Aadhya Gupta</p>
 
 </div>
 
@@ -177,6 +188,7 @@ function deleteTask(i) {
 function saveData() {
   localStorage.setItem("tasks", JSON.stringify(tasks));
 }
+
 
 // QUIZ
 let questions = [
@@ -234,4 +246,3 @@ loadQuestion();
 
 </body>
 </html>
-
