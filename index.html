@@ -1,248 +1,155 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Aadhya's Revision Tracker</title>
-
-  <!-- Mobile friendly -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <style>
-    body {
-      font-family: Arial;
-      text-align: center;
-      margin: 0;
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      color: white;
-    }
-
-    h1 {
-      margin-top: 20px;
-      animation: fadeIn 1s ease-in-out;
-    }
-
-    .tagline {
-      font-size: 14px;
-      color: #ddd;
-      margin-bottom: 10px;
-    }
-
-    .container {
-      background: white;
-      color: black;
-      width: 90%;
-      max-width: 400px;
-      margin: 20px auto;
-      padding: 20px;
-      border-radius: 15px;
-      box-shadow: 0px 10px 25px rgba(0,0,0,0.3);
-      animation: slideUp 0.6s ease;
-    }
-
-    input {
-      padding: 10px;
-      margin: 5px;
-      width: 90%;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-    }
-
-    button {
-      padding: 10px;
-      margin: 5px;
-      border: none;
-      border-radius: 8px;
-      background: #667eea;
-      color: white;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-
-    button:hover {
-      transform: scale(1.05);
-      background: #5a67d8;
-    }
-
-    .option-btn {
-      display: block;
-      width: 90%;
-      margin: 5px auto;
-      background: #eee;
-      color: black;
-    }
-
-    .selected {
-      background: #667eea !important;
-      color: white;
-    }
-
-    ul {
-      list-style: none;
-      padding: 0;
-    }
-
-    li {
-      background: #f4f7fb;
-      margin: 10px;
-      padding: 10px;
-      border-radius: 10px;
-      display: flex;
-      justify-content: space-between;
-      animation: fadeIn 0.5s;
-    }
-
-    .delete-btn {
-      background: red;
-      color: white;
-      border: none;
-      padding: 5px;
-      border-radius: 5px;
-    }
-
-    #count {
-      margin-top: 10px;
-      font-weight: bold;
-    }
-
-    .footer {
-      font-size: 12px;
-      margin-top: 10px;
-      color: #aaa;
-    }
-
-    @keyframes fadeIn {
-      from {opacity: 0;}
-      to {opacity: 1;}
-    }
-
-    @keyframes slideUp {
-      from {transform: translateY(30px); opacity: 0;}
-      to {transform: translateY(0); opacity: 1;}
-    }
-
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aadhya Revision Pro</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#08111f;color:#fff;overflow-x:hidden}
+.bg{position:fixed;inset:0;z-index:-1;background:radial-gradient(circle at 20% 20%,#7c3aed55,transparent 30%),radial-gradient(circle at 80% 30%,#06b6d455,transparent 30%),radial-gradient(circle at 50% 80%,#ec489955,transparent 30%),#08111f}
+.wrap{max-width:1200px;margin:auto;padding:20px}
+h1{margin-bottom:10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px}
+.card{background:rgba(255,255,255,.08);backdrop-filter:blur(18px);border-radius:22px;padding:18px;border:1px solid rgba(255,255,255,.1);transition:.3s}
+.card:hover{transform:translateY(-6px) rotateX(4deg)}
+.big{font-size:2rem;font-weight:bold}
+input,button,select{padding:12px;border:none;border-radius:12px}
+input,select{background:#ffffff12;color:#fff}
+button{cursor:pointer;background:linear-gradient(135deg,#7c3aed,#06b6d4);color:#fff;font-weight:bold}
+.controls{display:grid;grid-template-columns:1fr 1fr auto;gap:10px;margin:20px 0}
+ul{list-style:none}
+li{display:flex;justify-content:space-between;align-items:center;padding:12px;margin:10px 0;background:#ffffff0d;border-radius:14px}
+.done{text-decoration:line-through;opacity:.6}
+.progress{height:14px;background:#ffffff15;border-radius:20px;overflow:hidden}
+.fill{height:100%;background:linear-gradient(90deg,#22c55e,#06b6d4);width:0%;transition:.5s}
+.badge{display:inline-block;padding:6px 10px;border-radius:999px;background:#ffffff15;margin:4px}
+.heatmap{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:10px}
+.day{height:22px;border-radius:5px;background:#1e293b}
+.active{background:#22c55e}
+@media(max-width:700px){.controls{grid-template-columns:1fr}}
+</style>
 </head>
-
 <body>
+<div class="bg"></div>
+<div class="wrap">
+<h1>🚀 Aadhya Revision Pro</h1>
 
-<h1>📘 Aadhya's Revision Tracker</h1>
-<p class="tagline">Track. Revise. Improve 🚀</p>
+<div class="grid">
+<div class="card"><div id="tasks" class="big">0</div>Total Tasks</div>
+<div class="card"><div id="done" class="big">0</div>Completed</div>
+<div class="card"><div id="xp" class="big">0</div>XP</div>
+<div class="card"><div id="level" class="big">1</div>Level</div>
+</div>
 
-<div class="container">
+<div class="card" style="margin-top:15px">
+<h3>🔥 Streak & Progress</h3>
+<div class="progress"><div class="fill" id="fill"></div></div>
+<p id="percent">0%</p>
+<p>Current Streak: <span id="streak">0</span> days</p>
+</div>
 
-  <input type="text" id="subject" placeholder="Subject"><br>
-  <input type="text" id="topic" placeholder="Topic"><br>
+<div class="controls">
+<input id="subject" placeholder="Subject">
+<input id="topic" placeholder="Topic">
+<button onclick="addTask()">Add</button>
+</div>
 
-  <button onclick="addTask()">Add</button>
+<div class="card">
+<h3>📚 Revision Tasks</h3>
+<ul id="list"></ul>
+</div>
 
-  <ul id="taskList"></ul>
-  <p id="count">Total Tasks: 0</p>
+<div class="grid" style="margin-top:15px">
+<div class="card">
+<h3>🏆 Achievements</h3>
+<div id="badges"></div>
+</div>
 
-  <h3>Quick Quiz</h3>
-  <p id="question"></p>
-  <div id="options"></div>
-  <button onclick="nextQuestion()">Next</button>
-  <p id="score"></p>
+<div class="card">
+<h3>📅 Study Heatmap</h3>
+<div class="heatmap" id="heat"></div>
+</div>
 
-  <p class="footer">Built by Aadhya Gupta</p>
-
+<div class="card">
+<h3>📈 Insight</h3>
+<p id="insight">Start studying to unlock insights.</p>
+</div>
+</div>
 </div>
 
 <script>
+let data=JSON.parse(localStorage.getItem("revpro"))||{tasks:[],streak:0};
 
-let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
-displayTasks();
-
-function addTask() {
-  let subject = document.getElementById("subject").value;
-  let topic = document.getElementById("topic").value;
-
-  if (!subject || !topic) return;
-
-  tasks.push(subject + " - " + topic);
-  saveData();
-  displayTasks();
-
-  document.getElementById("subject").value = "";
-  document.getElementById("topic").value = "";
+function save(){
+localStorage.setItem("revpro",JSON.stringify(data));
+render();
 }
 
-function displayTasks() {
-  let list = document.getElementById("taskList");
-  list.innerHTML = "";
-
-  tasks.forEach((t, i) => {
-    let li = document.createElement("li");
-    li.innerHTML = t + " <button class='delete-btn' onclick='deleteTask(" + i + ")'>X</button>";
-    list.appendChild(li);
-  });
-
-  document.getElementById("count").innerText = "Total Tasks: " + tasks.length;
+function addTask(){
+let s=subject.value.trim();
+let t=topic.value.trim();
+if(!s||!t)return;
+data.tasks.push({s,t,done:false});
+subject.value="";topic.value="";
+save();
 }
 
-function deleteTask(i) {
-  tasks.splice(i, 1);
-  saveData();
-  displayTasks();
+function toggle(i){
+if(!data.tasks[i].done){
+data.tasks[i].done=true;
+data.streak++;
+}else{
+data.tasks[i].done=false;
+}
+save();
 }
 
-function saveData() {
-  localStorage.setItem("tasks", JSON.stringify(tasks));
+function del(i){data.tasks.splice(i,1);save();}
+
+function render(){
+list.innerHTML="";
+data.tasks.forEach((x,i)=>{
+let li=document.createElement("li");
+li.innerHTML=`<div class="${x.done?'done':''}"><b>${x.s}</b><br>${x.t}</div>
+<div><button onclick="toggle(${i})">✓</button>
+<button onclick="del(${i})">🗑</button></div>`;
+list.appendChild(li);
+});
+
+let total=data.tasks.length;
+let done=data.tasks.filter(x=>x.done).length;
+let xp=done*25;
+let lvl=Math.floor(xp/100)+1;
+let pct=total?Math.round(done*100/total):0;
+
+tasks.textContent=total;
+document.getElementById("done").textContent=done;
+document.getElementById("xp").textContent=xp;
+level.textContent=lvl;
+fill.style.width=pct+"%";
+percent.textContent=pct+"% Completed";
+streak.textContent=data.streak;
+
+badges.innerHTML="";
+if(done>=1) badges.innerHTML+='<span class="badge">🎯 First Revision</span>';
+if(done>=5) badges.innerHTML+='<span class="badge">🔥 Consistent</span>';
+if(done>=10) badges.innerHTML+='<span class="badge">🏆 Study Master</span>';
+
+heat.innerHTML="";
+for(let i=0;i<35;i++){
+let d=document.createElement("div");
+d.className="day"+(i<Math.min(done,35)?" active":"");
+heat.appendChild(d);
 }
 
-
-// QUIZ
-let questions = [
-  { q: "What is H2O?", options: ["Oxygen", "Water", "Hydrogen"], answer: "Water" },
-  { q: "Capital of India?", options: ["Delhi", "Mumbai", "Kolkata"], answer: "Delhi" },
-  { q: "2 x 5 = ?", options: ["10", "12", "8"], answer: "10" }
-];
-
-let current = 0;
-let score = 0;
-let selected = null;
-
-function loadQuestion() {
-  let q = questions[current];
-  document.getElementById("question").innerText = q.q;
-
-  let optionsDiv = document.getElementById("options");
-  optionsDiv.innerHTML = "";
-  selected = null;
-
-  q.options.forEach(opt => {
-    let btn = document.createElement("button");
-    btn.innerText = opt;
-    btn.className = "option-btn";
-
-    btn.onclick = function () {
-      selected = opt;
-
-      let all = document.querySelectorAll(".option-btn");
-      all.forEach(b => b.classList.remove("selected"));
-
-      btn.classList.add("selected");
-    };
-
-    optionsDiv.appendChild(btn);
-  });
+let subjects={};
+data.tasks.forEach(t=>subjects[t.s]=(subjects[t.s]||0)+1);
+let top=Object.keys(subjects).sort((a,b)=>subjects[b]-subjects[a])[0];
+insight.textContent=top?`${top} is your most revised subject.`:"Start studying to unlock insights.";
 }
-
-function nextQuestion() {
-  if (selected === questions[current].answer) score++;
-
-  current++;
-
-  if (current < questions.length) {
-    loadQuestion();
-  } else {
-    document.getElementById("score").innerText =
-      "Score: " + score + "/" + questions.length;
-  }
-}
-
-loadQuestion();
-
+render();
 </script>
-
 </body>
 </html>
